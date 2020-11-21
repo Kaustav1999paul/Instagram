@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/home"
+        android:title="Home"
+        android:icon="@drawable/ic_twotone_home_24"/>
+
+    <item android:id="@+id/search"
+        android:title="Search"
+        android:icon="@drawable/ic_twotone_search_24"/>
+
+    <item android:id="@+id/alert"
+        android:title="Alerts"
+        android:icon="@drawable/ic_twotone_favorite_24"/>
+
+    <item android:id="@+id/account"
+        android:title="Accounts"
+        android:icon="@drawable/ic_twotone_account_circle_24"/>
+</menu>
