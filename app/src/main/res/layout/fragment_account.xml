@@ -70,7 +70,7 @@
                     android:id="@+id/uName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="User Name"
+                    android:text=""
                     android:textStyle="bold"
                     android:shadowDy="5"
                     android:shadowColor="#FF9800"
@@ -91,6 +91,7 @@
                         android:layout_marginTop="10dp"
                         android:orientation="vertical">
                         <TextView
+                            android:id="@+id/totalFollowings"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="00"
@@ -118,6 +119,7 @@
                         android:layout_marginTop="10dp"
                         android:orientation="vertical">
                         <TextView
+                            android:id="@+id/totalFollowers"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="00"
@@ -131,7 +133,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Follows"
+                            android:text="Followers"
                             android:textColor="#323232"
                             android:textSize="10dp"/>
 
@@ -178,21 +180,21 @@
             android:id="@+id/email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="example@gmail.com"
+            android:text=""
             android:layout_marginTop="2dp"
             android:layout_marginHorizontal="20dp"
-            android:textColor="#FF9800"
+            android:textColor="#FF7700"
             android:textSize="10dp"/>
         <TextView
             android:id="@+id/bio"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="ABCDEFGHI"
-            android:layout_marginTop="5dp"
+            android:text=""
+            android:layout_marginTop="1dp"
             android:layout_marginBottom="10dp"
             android:layout_marginHorizontal="20dp"
             android:textColor="#323232"
-            android:textSize="15dp"/>
+            android:textSize="12dp"/>
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"

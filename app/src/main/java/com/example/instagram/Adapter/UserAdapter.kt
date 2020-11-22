@@ -8,8 +8,10 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.instagram.Fragments.AccountFragment
 import com.example.instagram.Model.User
 import com.example.instagram.R
 import com.example.instagram.SignInActivity
@@ -44,6 +46,9 @@ class UserAdapter (private var mContext: Context,
             val  pref = mContext.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit()
             pref.putString("profileId", user.getUid())
             pref.apply()
+
+            (mContext as FragmentActivity).supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_holder, AccountFragment()).commit()
         }
 
         checkFollowStatus(user.getUid(), holder.followButton)
