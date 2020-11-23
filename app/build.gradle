@@ -51,5 +51,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-database-ktx'
     implementation 'com.google.firebase:firebase-storage-ktx'
     implementation 'com.github.bumptech.glide:glide:4.4.0'
+    implementation 'com.theartofdev.edmodo:android-image-cropper:2.8.+'
+    implementation 'com.github.jorgecastilloprz:fabprogresscircle:1.01@aar'
     kapt 'com.github.bumptech.glide:compiler:4.4.0'
 }
