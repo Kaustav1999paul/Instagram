@@ -9,13 +9,15 @@
         android:id="@+id/app_bar_layout_search"
         android:layout_width="match_parent"
         android:background="#FFFFFF"
-        android:paddingTop="30dp"
+        android:elevation="0dp"
+        app:elevation="0dp"
+        android:paddingTop="5dp"
         android:layout_height="wrap_content">
 
         <EditText
             android:id="@+id/searchET"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="45dp"
             android:background="@drawable/round_corners"
             android:layout_margin="10dp"
             android:layout_weight="1"
@@ -41,10 +43,6 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:elevation="10dp"
-            android:shadowColor="#FF5722"
-            android:shadowRadius="10"
-            android:shadowDy="6"
             android:text="Search for your Connections"
             android:textColor="#FF9800"
             android:textSize="15dp"

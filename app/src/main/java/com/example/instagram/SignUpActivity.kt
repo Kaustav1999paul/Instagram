@@ -82,6 +82,14 @@ class SignUpActivity : AppCompatActivity() {
         userReff.child(currentUserId).setValue(userMap).addOnCompleteListener {task ->
             if (task.isSuccessful){
                 Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show()
+
+                FirebaseDatabase.getInstance().reference
+                        .child("Follow")
+                        .child(FirebaseAuth.getInstance().currentUser!!.uid)
+                        .child("Following")
+                        .child(FirebaseAuth.getInstance().currentUser!!.uid)
+                        .setValue(true)
+
                 val intent = Intent(this@SignUpActivity, MainActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)

@@ -165,7 +165,9 @@ class AccountFragment : Fragment() {
         folllowersRef.addValueEventListener(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()){
-                    followings.text = snapshot.childrenCount.toString()
+                    var count: Long = snapshot.childrenCount
+                    var actual: Long = count -1
+                    followings.text = actual.toString()
                 }
             }
 
