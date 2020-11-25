@@ -6,7 +6,11 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.instagram.Adapter.CommentAdapter
+import com.example.instagram.Model.Comment
 import com.example.instagram.Model.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -24,6 +28,8 @@ class CommentsActivity : AppCompatActivity() {
     private lateinit var postButton: TextView
     private lateinit var commentEdit: EditText
     private var firebaseUser: FirebaseUser? = null
+    private var commentAdapter: CommentAdapter? = null
+    private var commentList: MutableList<Comment>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,6 +58,19 @@ class CommentsActivity : AppCompatActivity() {
             }
         }
 
+        var recylycerView: RecyclerView
+        recylycerView = findViewById(R.id.commentList)
+        val linearLayoutManager = LinearLayoutManager(this)
+        linearLayoutManager.reverseLayout = true
+        linearLayoutManager.stackFromEnd = true
+        linearLayoutManager.isSmoothScrollbarEnabled = true
+        recylycerView.layoutManager = linearLayoutManager
+
+        commentList = ArrayList()
+        commentAdapter = CommentAdapter(this, commentList)
+        recylycerView.adapter = commentAdapter
+        readComments()
+
     }
 
     private fun addComments(text: String) {
@@ -74,6 +93,29 @@ class CommentsActivity : AppCompatActivity() {
                     Glide.with(currentUserPhoto).load(user!!.getImage()).into(currentUserPhoto)
                 }
             }
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+
+        })
+    }
+
+    private fun readComments(){
+        val commentRef = FirebaseDatabase.getInstance().reference.child("Comments").child(postId)
+
+        commentRef.addValueEventListener(object : ValueEventListener{
+            override fun onDataChange(po: DataSnapshot) {
+                if (po.exists()){
+                    commentList!!.clear()
+                    for (snapshot in po.children){
+                        val comment = snapshot.getValue(Comment::class.java)
+                        commentList!!.add(comment!!)
+                    }
+                    commentAdapter!!.notifyDataSetChanged()
+                }
+
+            }
+
             override fun onCancelled(error: DatabaseError) {
 
             }
