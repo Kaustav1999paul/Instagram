@@ -2,19 +2,17 @@ package com.example.instagram
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.Window
-import android.view.WindowManager
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
-import com.github.jorgecastilloprz.FABProgressCircle
 import com.google.android.gms.tasks.Continuation
 import com.google.android.gms.tasks.Task
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
@@ -25,9 +23,8 @@ import com.theartofdev.edmodo.cropper.CropImage
 
 class AddPostActivity : AppCompatActivity() {
 
-    private lateinit var fabProgressCircle: FABProgressCircle
-    private lateinit var fabView: FloatingActionButton
-    private lateinit var cancelPost: FloatingActionButton
+    private lateinit var fabView: TextView
+    private lateinit var cancelPost: ImageView
     private lateinit var imageSelect: ImageView
     private lateinit var postTitle: EditText
     private var myUrl = ""
@@ -45,14 +42,7 @@ class AddPostActivity : AppCompatActivity() {
 
         storagePostPictureRef = FirebaseStorage.getInstance().reference.child("Posts Pictures")
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            val w: Window = window
-            w.setFlags(
-                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-            )
-        }
-        fabProgressCircle = findViewById(R.id.fabProgressCircle)
+
         fabView = findViewById(R.id.fab)
         cancelPost = findViewById(R.id.cancelPost)
         cancelPost.setOnClickListener { finish() }
@@ -60,6 +50,7 @@ class AddPostActivity : AppCompatActivity() {
         fabView.setOnClickListener {
             uploadImage()
         }
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -77,9 +68,10 @@ class AddPostActivity : AppCompatActivity() {
             imageUri == null -> Toast.makeText(this, "Please Select image", Toast.LENGTH_SHORT).show()
             postTitle.text.toString() == "" -> Toast.makeText(this, "Title Empty", Toast.LENGTH_SHORT).show()
             else -> {
+                fabView.text = "Posting..."
+                fabView.isClickable = false
                 cancelPost.isEnabled = false
                 cancelPost.isClickable = false
-                fabProgressCircle.show()
                 val fileRef = storagePostPictureRef!!.child(System.currentTimeMillis().toString() + ".jpg")
                 var uploadTask: StorageTask<*>
                 uploadTask = fileRef.putFile(imageUri!!)
@@ -107,7 +99,6 @@ class AddPostActivity : AppCompatActivity() {
                         userMap["postimage"] = myUrl
                         ref.child(postId).updateChildren(userMap).addOnCompleteListener { task ->
                             if (task.isSuccessful){
-                                fabProgressCircle.beginFinalAnimation()
                                 finish()
                                 Toast.makeText(this, "Account Updated", Toast.LENGTH_SHORT).show()
                             }

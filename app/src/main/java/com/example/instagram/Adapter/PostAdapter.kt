@@ -1,6 +1,7 @@
 package com.example.instagram.Adapter
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.instagram.CommentsActivity
 import com.example.instagram.Model.Post
 import com.example.instagram.Model.User
 import com.example.instagram.R
@@ -36,6 +38,68 @@ class PostAdapter(private var mContext: Context,
         holder.postTitle.text = post.getDescription()
         getPublisherImfo(holder.profileImage, holder.namePost, post.getPublisher())
 
+        holder.comment.setOnClickListener {
+            var intent = Intent(mContext, CommentsActivity::class.java)
+            intent.putExtra("postId", post.getPostId())
+            intent.putExtra("publisherId", post.getPublisher())
+            mContext.startActivity(intent)
+        }
+
+        isLikes(post.getPostId(), holder.liked)
+        holder.liked.setOnClickListener {
+            if (holder.liked.tag == "Like"){
+                FirebaseDatabase.getInstance().reference.child("Likes")
+                    .child(post.getPostId())
+                    .child(firebaseUser!!.uid)
+                    .setValue(true)
+            }else{
+                FirebaseDatabase.getInstance().reference.child("Likes")
+                    .child(post.getPostId())
+                    .child(firebaseUser!!.uid)
+                    .removeValue()
+            }
+        }
+        numberOfLikes(holder.likeCount, post.getPostId())
+    }
+
+    private fun numberOfLikes(likeCount: TextView, postId: String) {
+        val LikesRef = FirebaseDatabase.getInstance().reference.child("Likes").child(postId)
+
+        LikesRef.addValueEventListener(object :ValueEventListener{
+            override fun onDataChange(po: DataSnapshot) {
+                if (po.exists()){
+                   likeCount.text = po.childrenCount.toString() + " Likes"
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+        })
+    }
+
+    private fun isLikes(postId: String, liked: ImageView) {
+        val firebaseUser = FirebaseAuth.getInstance().currentUser
+
+        val LikesRef = FirebaseDatabase.getInstance().reference.child("Likes").child(postId)
+
+        LikesRef.addValueEventListener(object :ValueEventListener{
+            override fun onDataChange(po: DataSnapshot) {
+                if (po.child(firebaseUser!!.uid).exists()){
+                    liked.setImageResource(R.drawable.ic_liked)
+                    liked.tag = "Liked"
+                }else{
+                    liked.setImageResource(R.drawable.ic_round_favorite_border_24)
+                    liked.tag = "Like"
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+        })
     }
 
     private fun getPublisherImfo(profileImage: ImageView, namePost: TextView, publisher: String) {

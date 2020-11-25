@@ -29,6 +29,7 @@ class AccountFragment : Fragment() {
     private lateinit var uName: TextView
     private lateinit var bio: TextView
     private lateinit var email: TextView
+    private lateinit var userName: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,6 +42,7 @@ class AccountFragment : Fragment() {
         uName = view.findViewById(R.id.uName)
         email = view.findViewById(R.id.email)
         bio = view.findViewById(R.id.bio)
+        userName = view.findViewById(R.id.fullName)
         folloewes = view.findViewById(R.id.totalFollowers)
         followings = view.findViewById(R.id.totalFollowings)
 
@@ -191,6 +193,7 @@ class AccountFragment : Fragment() {
                     uName.text = user!!.getFullName()
                     bio.text = user!!.getBio()
                     email.text = user!!.getEmail()
+                    userName.text = user!!.getUserName()
                 }
             }
 

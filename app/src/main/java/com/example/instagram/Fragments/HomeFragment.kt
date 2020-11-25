@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.instagram.Adapter.PostAdapter
@@ -25,6 +26,8 @@ class HomeFragment : Fragment() {
     private var postAdapter: PostAdapter? = null
     private var postList: MutableList<Post>? = null
     private var followingList: MutableList<Post>? = null
+    private var temp: ConstraintLayout? = null
+    private lateinit var recyclerView: RecyclerView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,12 +36,8 @@ class HomeFragment : Fragment() {
         // Inflate the layout for this fragment
         var view = inflater.inflate(R.layout.fragment_home, container, false)
 
-        val newPost = view.findViewById<ImageView>(R.id.newPost)
-        newPost.setOnClickListener {
-            startActivity(Intent(activity, AddPostActivity::class.java))
-        }
-
-        var recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view_home)
+        temp = view.findViewById(R.id.temp)
+        recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view_home)
         val linearLayoutManager = LinearLayoutManager(context)
         linearLayoutManager.reverseLayout = true
         linearLayoutManager.stackFromEnd = true
@@ -93,6 +92,8 @@ class HomeFragment : Fragment() {
                     for (userd in (followingList as ArrayList<String>)){
                         if (post!!.getPublisher().equals(userd)){
                             postList!!.add(post)
+                            temp?.visibility = View.GONE
+                            recyclerView?.visibility = View.VISIBLE
                         }
                         postAdapter!!.notifyDataSetChanged()
                     }

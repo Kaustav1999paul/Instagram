@@ -1,5 +1,6 @@
 package com.example.instagram
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.Window
@@ -31,6 +32,11 @@ class MainActivity : AppCompatActivity() {
                 }
                 menuItem.itemId == R.id.search -> {
                     loadFragment(SearchFragment())
+                    return@setOnNavigationItemSelectedListener true
+                }
+                menuItem.itemId == R.id.addPost -> {
+                    menuItem.isChecked = false
+                    startActivity(Intent(this@MainActivity, AddPostActivity::class.java))
                     return@setOnNavigationItemSelectedListener true
                 }
                 menuItem.itemId == R.id.alert -> {
