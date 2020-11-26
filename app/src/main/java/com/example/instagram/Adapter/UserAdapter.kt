@@ -54,6 +54,7 @@ class UserAdapter (private var mContext: Context,
         checkFollowStatus(user.getUid(), holder.followButton)
         holder.followButton.setOnClickListener {
             if (holder.followButton.text.toString() == "Follow"){
+                addNotifications(user.getUid())
                 firebaseUser?.uid.let { it1 ->
                     FirebaseDatabase.getInstance().reference
                             .child("Follow")
@@ -134,5 +135,18 @@ class UserAdapter (private var mContext: Context,
         var userFullNameTV : TextView = itemView.findViewById(R.id.nameUserFullName)
         var followButton : TextView = itemView.findViewById(R.id.followButton)
         var userAvatarIV : ImageView = itemView.findViewById(R.id.avatarUser)
+    }
+
+    private fun addNotifications(userId: String) {
+        val notifRef = FirebaseDatabase.getInstance().reference
+            .child("Notifications").child(userId)
+
+        val notiMap = HashMap<String, Any>()
+        notiMap["userId"] = firebaseUser!!.uid
+        notiMap["text"] = "started following you"
+        notiMap["postId"] = ""
+        notiMap["isPost"] = false
+
+        notifRef.push().setValue(notiMap)
     }
 }

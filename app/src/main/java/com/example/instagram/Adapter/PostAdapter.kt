@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.instagram.CommentsActivity
+import com.example.instagram.FullScreenImage
 import com.example.instagram.Model.Post
 import com.example.instagram.Model.User
 import com.example.instagram.R
@@ -29,7 +30,6 @@ class PostAdapter(private var mContext: Context,
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(mContext).inflate(R.layout.post_layout, parent, false)
         return ViewHolder(view)
-
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -37,6 +37,13 @@ class PostAdapter(private var mContext: Context,
         Glide.with(holder.postImage).load(post.getPostImage()).into(holder.postImage)
         holder.postTitle.text = post.getDescription()
         getPublisherImfo(holder.profileImage, holder.namePost, post.getPublisher())
+
+        holder.postImage.setOnClickListener {
+            var intent = Intent(mContext, FullScreenImage::class.java )
+            intent.putExtra("image", post.getPostImage())
+            intent.putExtra("idPost", post.getPostId())
+            mContext.startActivity(intent)
+        }
 
         holder.comment.setOnClickListener {
             var intent = Intent(mContext, CommentsActivity::class.java)
@@ -52,6 +59,8 @@ class PostAdapter(private var mContext: Context,
                     .child(post.getPostId())
                     .child(firebaseUser!!.uid)
                     .setValue(true)
+
+                addNotifications(post.getPublisher(), post.getPostId())
             }else{
                 FirebaseDatabase.getInstance().reference.child("Likes")
                     .child(post.getPostId())
@@ -146,5 +155,18 @@ class PostAdapter(private var mContext: Context,
             comment = itemView.findViewById(R.id.commentButton)
             likeCount = itemView.findViewById(R.id.likeCount)
         }
+    }
+
+    private fun addNotifications(userId: String, postId: String) {
+        val notifRef = FirebaseDatabase.getInstance().reference
+            .child("Notifications").child(userId)
+
+        val notiMap = HashMap<String, Any>()
+        notiMap["userId"] = firebaseUser!!.uid
+        notiMap["text"] = "liked your post"
+        notiMap["postId"] = postId
+        notiMap["isPost"] = true
+
+        notifRef.push().setValue(notiMap)
     }
 }

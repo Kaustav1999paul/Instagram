@@ -30,6 +30,7 @@ class CommentsActivity : AppCompatActivity() {
     private var firebaseUser: FirebaseUser? = null
     private var commentAdapter: CommentAdapter? = null
     private var commentList: MutableList<Comment>? = null
+    private var text = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,7 +51,7 @@ class CommentsActivity : AppCompatActivity() {
         publisherId = intent.getStringExtra("publisherId").toString()
 
         postButton.setOnClickListener {
-            val text = commentEdit.text.trim().toString()
+            text = commentEdit.text.trim().toString()
             if (text == ""){
                 Toast.makeText(this@CommentsActivity, "No comments typed", Toast.LENGTH_SHORT).show()
             }else{
@@ -82,6 +83,8 @@ class CommentsActivity : AppCompatActivity() {
 
         commentRef.push().setValue(commentMap)
         commentEdit!!.text.clear()
+        var txt = text
+        addNotifications(txt)
 
     }
     private fun userInfo(){
@@ -121,5 +124,18 @@ class CommentsActivity : AppCompatActivity() {
             }
 
         })
+    }
+
+    private fun addNotifications(txt: Any?) {
+        val notifRef = FirebaseDatabase.getInstance().reference
+            .child("Notifications").child(publisherId!!)
+
+        val notiMap = HashMap<String, Any>()
+        notiMap["userId"] = firebaseUser!!.uid
+        notiMap["text"] = "Commented: $txt"
+        notiMap["postId"] = postId
+        notiMap["isPost"] = true
+
+        notifRef.push().setValue(notiMap)
     }
 }
