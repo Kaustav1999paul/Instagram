@@ -20,6 +20,7 @@
         app:itemHorizontalTranslationEnabled="false"
         android:layout_alignParentBottom="true"
         app:itemIconTint="@drawable/selector"
+        android:fadeScrollbars="true"
         app:itemRippleColor="#00FFFFFF"
         app:itemTextColor="@drawable/selector"
         app:menu="@menu/bottom_menu"/>

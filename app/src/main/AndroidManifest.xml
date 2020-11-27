@@ -12,7 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Instagram">
-        <activity android:name=".FullScreenImage"
+        <activity
+            android:name=".FullScreenImage"
             android:theme="@style/FullScreen" />
         <activity
             android:name=".CommentsActivity"
